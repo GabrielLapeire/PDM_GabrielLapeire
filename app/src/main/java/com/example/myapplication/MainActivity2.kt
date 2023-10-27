@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,7 @@ class MainActivity2 : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = UserAdapter(generarNombres())
+        adapter = UserAdapter(generateUser())
         recyclerView.adapter = adapter
     }
 
@@ -33,6 +32,19 @@ class MainActivity2 : AppCompatActivity() {
             nameList.add("name $i")
         }
         return nameList
+    }
+
+    private fun generateUser(): List<User> {
+        val userList = mutableListOf<User>()
+        for (i in 1..100) {
+            val user = User(
+                "name $i",
+                i,
+                "url"
+            )
+            userList.add(user)
+        }
+        return userList
     }
 
     override fun onStart() {
@@ -66,11 +78,17 @@ class MainActivity2 : AppCompatActivity() {
     }
 }
 
-class UserAdapter(private val nameList: List<String>): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class User(
+    val name: String,
+    val age: Int,
+    val imageURL: String
+    )
+
+class UserAdapter(private val userList: List<User>): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     class UserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
 
-        fun bind(name:String) {
+        fun bind(name: String) {
             nameTextView.text = name
         }
     }
@@ -81,11 +99,11 @@ class UserAdapter(private val nameList: List<String>): RecyclerView.Adapter<User
     }
 
     override fun getItemCount(): Int {
-        return nameList.size
+        return userList.size
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val name = nameList[position]
-        holder.bind(name)
+        val user = userList[position]
+        holder.bind(user.name)
     }
 }
